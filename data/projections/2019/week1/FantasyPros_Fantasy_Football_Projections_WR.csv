@@ -47,18 +47,18 @@ Albert Wilson,MIA,3.7,51.8,0.1,0.6,3.7,0,0,10
 Geronimo Allison,GB,3.5,49.6,0.2,0.1,0.5,0,0,9.8
 Ted Ginn Jr.,NO,3.6,45,0.2,0.3,2,0,0,9.4
 Jamison Crowder,NYJ,3.5,44.1,0.2,0.1,0.8,0,0,9.1
-Devante Parker,MIA,3.6,49.4,0.1,0,0,0,0,9
+DeVante Parker,MIA,3.6,49.4,0.1,0,0,0,0,9
 DeSean Jackson,PHI,3,46.5,0.2,0.2,1.5,0,0,8.9
 John Brown,BUF,3.1,47.6,0.1,0.2,1.1,0,0,8.8
 Mohamed Sanu,ATL,3.3,43.7,0.1,0.3,1.6,0,0,8.7
-Paul Richardson,WAS,3.3,39.2,0.1,0.1,0.7,0,0,8
+Paul Richardson Jr.,WAS,3.3,39.2,0.1,0.1,0.7,0,0,8
 Taylor Gabriel,CHI,3.2,35.6,0.1,0.6,4,0,0,8
 Cole Beasley,BUF,3.6,37.6,0.1,0.1,0.5,0,0,8
 Marquise Goodwin,SF,2.8,38.4,0.2,0.2,1.1,0,0,7.9
 Zay Jones,BUF,3.2,37.4,0.1,0.2,2,0,0,7.9
-Willie Snead,BAL,3.3,38.8,0.1,0.1,1,0,0,7.9
+Willie Snead IV,BAL,3.3,38.8,0.1,0.1,1,0,0,7.9
 Tyrell Williams,OAK,3.1,38.4,0.1,0.2,1.7,0,0,7.9
-John Ross,CIN,3,36.4,0.2,0.2,1.5,0,0,7.7
+John Ross III,CIN,3,36.4,0.2,0.2,1.5,0,0,7.7
 Marquez Valdes-Scantling,GB,2.8,41.2,0.1,0.1,0.7,0,0,7.7
 Quincy Enunwa,NYJ,3.1,39,0.1,0,0.2,0,0,7.7
 Adam Humphries,TEN,3.2,36.4,0.1,0.2,1,0,0,7.7
@@ -77,15 +77,15 @@ Nelson Agholor,PHI,2.4,27.9,0.1,0.2,1.4,0,0,6.1
 Michael Crabtree,ARI,2.3,28.9,0.1,0.1,0.5,0,0,6
 Cody Latimer,NYG,2.5,30.1,0.1,0,0,0,0,6
 Robert Foster,BUF,1.8,36,0.1,0.1,0.5,0,0,5.9
-D.J. Chark,JAC,2.4,28.8,0.1,0,0,0,0,5.9
+D.J. Chark Jr.,JAC,2.4,28.8,0.1,0,0,0,0,5.9
 Miles Boykin,BAL,2.3,29.7,0.1,0,0,0,0,5.9
 Deebo Samuel,SF,2.4,25.2,0.2,0,0,0,0,5.8
 Devin Funchess,IND,2.5,27.9,0.1,0,0,0,0,5.8
 Rashard Higgins,CLE,2.1,28.4,0.1,0,0,0,0,5.7
-Phillip Dorsett,NE,2.2,24.5,0.1,0.2,1,0,0,5.5
+Phillip Dorsett III,NE,2.2,24.5,0.1,0.2,1,0,0,5.5
 Hunter Renfrow,OAK,2.3,26.1,0.1,0,0,0,0,5.4
 Marqise Lee,JAC,2,24.4,0.1,0.3,2,0,0,5.4
-D.K. Metcalf,SEA,2,28.4,0.1,0,0,0,0,5.4
+DK Metcalf,SEA,2,28.4,0.1,0,0,0,0,5.4
 Jakeem Grant,MIA,1.8,26.5,0.1,0.5,2.6,0,0,5.1
 Travis Benjamin,LAC,1.9,23.6,0.1,0.3,1.8,0,0,4.8
 Jaron Brown,SEA,1.6,19.1,0.2,0.1,0.5,0,0,4.8
@@ -94,11 +94,11 @@ Kenny Stills,HOU,1.7,22.2,0.1,0,0,0,0,4.7
 A.J. Brown,TEN,1.8,22.1,0.1,0,0,0,0,4.4
 KeeSean Johnson,ARI,1.9,22.2,0,0,0,0,0,4.4
 Chad Beebe,MIN,1.8,20.8,0.1,0,0,0,0,4.4
-Bennie Fowler,NYG,1.6,21.3,0.1,0,0,0,0,4.3
+Bennie Fowler III,NYG,1.6,21.3,0.1,0,0,0,0,4.3
 Seth Roberts,BAL,1.7,21.4,0.1,0,0.1,0,0,4.2
 Damion Willis,CIN,1.6,19.8,0.1,0,0,0,0,4.2
 Jarius Wright,CAR,1.8,17.1,0.1,0.1,0.6,0,0,4.2
-J.J. Arcega-Whiteside,PHI,1.6,18.4,0.1,0,0,0,0,4.1
+JJ Arcega-Whiteside,PHI,1.6,18.4,0.1,0,0,0,0,4.1
 Andy Isabella,ARI,1.4,19.7,0.1,0.2,1.1,0,0,4.1
 Jake Kumerow,GB,1.6,18.2,0.1,0,0,0,0,4.1
 Tim Patrick,DEN,1.4,19.2,0.1,0,0.2,0,0,4.1
@@ -164,8 +164,8 @@ John Ursua,SEA,0.4,5,0,0,0,0,0,0.9
 Diontae Spencer,DEN,0.4,5,0,0,0,0,0,0.9
 Brandon Zylstra,CAR,0.3,4.1,0,0,0,0,0,0.8
 Malik Turner,SEA,0.3,3.7,0,0,0,0,0,0.8
-Scott Miller,TB,0.4,4,0,0,0,0,0,0.8
-Ray-Ray McCloud,CAR,0.3,3.5,0,0,0,0,0,0.8
+Scotty Miller,TB,0.4,4,0,0,0,0,0,0.8
+Ray-Ray McCloud III,CAR,0.3,3.5,0,0,0,0,0,0.8
 Geremy Davis,LAC,0.3,2.9,0,0.2,1,0,0,0.7
 Isaiah McKenzie,BUF,0.2,2.9,0,0.2,1.1,0,0,0.7
 Darrius Shepherd,GB,0.3,4,0,0,0,0,0,0.7
@@ -174,7 +174,6 @@ Byron Pringle,KC,0.3,4,0,0,0,0,0,0.7
 Kalif Raymond,TEN,0.3,3,0,0,0,0,0,0.6
 Damiere Byrd,ARI,0.2,2.9,0,0,0,0,0,0.6
 Trent Sherfield,ARI,0.3,2.7,0,0,0,0,0,0.6
-Isaac Whitney,HOU,0.2,2.6,0,0,0,0,0,0.6
 Gehrig Dieter,KC,0.2,2.5,0,0,0,0,0,0.6
 Javon Wims,CHI,0.2,3,0,0,0,0,0,0.6
 Brittan Golden,NYG,0.2,2.6,0,0,0,0,0,0.5
@@ -182,16 +181,16 @@ Devin Smith,DAL,0.2,2.5,0,0,0,0,0,0.5
 Isaiah Ford,MIA,0.2,2.6,0,0,0,0,0,0.5
 Braxton Berrios,NYJ,0.2,2,0,0.1,1,0,0,0.5
 Pharoh Cooper,CIN,0.2,1.9,0,0.1,0.4,0,0,0.4
-Richie James,SF,0.2,1.8,0,0,0,0,0,0.4
+Richie James Jr.,SF,0.2,1.8,0,0,0,0,0,0.4
 Nick Williams,SF,0.2,1.8,0,0,0,0,0,0.4
 Gunner Olszewski,NE,0.2,2,0,0,0,0,0,0.4
 Robert Davis,WAS,0.2,2,0,0,0,0,0,0.4
-Steven Sims,WAS,0.2,2,0,0,0,0,0,0.4
+Steven Sims Jr.,WAS,0.2,2,0,0,0,0,0,0.4
 Nsimba Webster,LAR,0.2,2,0,0,0,0,0,0.4
 Mike Thomas,LAR,0.1,2,0,0,0,0,0,0.4
 JoJo Natson,LAR,0.1,1.5,0,0,0,0,0,0.3
-Khadarel Hodge,CLE,0.1,1.8,0,0,0,0,0,0.3
+KhaDarel Hodge,CLE,0.1,1.8,0,0,0,0,0,0.3
 Olamide Zaccheaus,ATL,0.1,1,0,0,0,0,0,0.2
 Marcus Johnson,IND,0.1,0.8,0,0,0,0,0,0.1
 Noah Brown,DAL,0,1,0,0,0,0,0,0.1
-Matt Slater,NE,0,0.2,0,0,0,0,0,0
+Matthew Slater,NE,0,0.2,0,0,0,0,0,0

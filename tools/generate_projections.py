@@ -9,6 +9,8 @@ position_projections = ["FantasyPros_Fantasy_Football_Projections_DST.csv", "Fan
 
 dk_player_salaries = "/home/pete/projects/my_lineup_optimizer/data/draft_kings_players_template/DKSalaries_thr-mon_9_5_19.csv"
 
+updated_dk_player_projections = "/home/pete/projects/my_lineup_optimizer/data/draft_kings_players_template/DKSalaries_thr-mon_9_5_19_fan_pro_proj.csv"
+
 # Each projection file (QB, RB, WR, TE, and DST)
 qb_file = week_1_files + position_projections[1]
 wr_file = week_1_files + position_projections[4]
@@ -52,3 +54,5 @@ for player in players_fpts_data_frame.Player:
     print(player, ": ", dk_player_index)
     print(player, ": ", dk_avg_pts_player)
     print(player, ": ", dk_salaries_data.loc[dk_salaries_data.Name == player].AvgPointsPerGame.values[0])
+
+dk_salaries_data.to_csv(updated_dk_player_projections, index=False, encoding='utf8')

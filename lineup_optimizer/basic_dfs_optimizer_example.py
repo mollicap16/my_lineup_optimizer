@@ -1,12 +1,15 @@
 from pydfs_lineup_optimizer import get_optimizer, Site, Sport, CSVLineupExporter
 import pandas
 
-csv_player_path="/home/pete/projects/my_lineup_optimizer/data/draft_kings_players_template/DKSalaries.csv"
+csv_player_path="/home/pete/projects/my_lineup_optimizer/data/draft_kings_players_template/DKSalaries_thr-mon_9_5_19_fan_pro_proj.csv"
 lineups_file="/home/pete/projects/my_lineup_optimizer/lineup_optimizer/lineups/results.csv"
 
 optimizer = get_optimizer(Site.DRAFTKINGS, Sport.FOOTBALL)
 optimizer.load_players_from_csv(csv_player_path)
-number_of_lineups = 20 
+# Adding Devante Adams to the lineup
+player = optimizer.get_player_by_name('Devante Adams')
+optimizer.add_player_to_lineup(player)
+number_of_lineups = 10 
 for lineup in optimizer.optimize(number_of_lineups):
     print(lineup)
 #    print(lineup.players)

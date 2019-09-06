@@ -80,18 +80,18 @@ Albert Wilson,10.0
 Geronimo Allison,9.8
 Ted Ginn Jr.,9.4
 Jamison Crowder,9.1
-Devante Parker,9.0
+DeVante Parker,9.0
 DeSean Jackson,8.9
 John Brown,8.8
 Mohamed Sanu,8.7
-Paul Richardson,8.0
+Paul Richardson Jr.,8.0
 Taylor Gabriel,8.0
 Cole Beasley,8.0
 Marquise Goodwin,7.9
 Zay Jones,7.9
-Willie Snead,7.9
+Willie Snead IV,7.9
 Tyrell Williams,7.9
-John Ross,7.7
+John Ross III,7.7
 Marquez Valdes-Scantling,7.7
 Quincy Enunwa,7.7
 Adam Humphries,7.7
@@ -110,15 +110,15 @@ Nelson Agholor,6.1
 Michael Crabtree,6.0
 Cody Latimer,6.0
 Robert Foster,5.9
-D.J. Chark,5.9
+D.J. Chark Jr.,5.9
 Miles Boykin,5.9
 Deebo Samuel,5.8
 Devin Funchess,5.8
 Rashard Higgins,5.7
-Phillip Dorsett,5.5
+Phillip Dorsett III,5.5
 Hunter Renfrow,5.4
 Marqise Lee,5.4
-D.K. Metcalf,5.4
+DK Metcalf,5.4
 Jakeem Grant,5.1
 Travis Benjamin,4.8
 Jaron Brown,4.8
@@ -127,11 +127,11 @@ Kenny Stills,4.7
 A.J. Brown,4.4
 KeeSean Johnson,4.4
 Chad Beebe,4.4
-Bennie Fowler,4.3
+Bennie Fowler III,4.3
 Seth Roberts,4.2
 Damion Willis,4.2
 Jarius Wright,4.2
-J.J. Arcega-Whiteside,4.1
+JJ Arcega-Whiteside,4.1
 Andy Isabella,4.1
 Jake Kumerow,4.1
 Tim Patrick,4.1
@@ -197,8 +197,8 @@ John Ursua,0.9
 Diontae Spencer,0.9
 Brandon Zylstra,0.8
 Malik Turner,0.8
-Scott Miller,0.8
-Ray-Ray McCloud,0.8
+Scotty Miller,0.8
+Ray-Ray McCloud III,0.8
 Geremy Davis,0.7
 Isaiah McKenzie,0.7
 Darrius Shepherd,0.7
@@ -207,7 +207,6 @@ Byron Pringle,0.7
 Kalif Raymond,0.6
 Damiere Byrd,0.6
 Trent Sherfield,0.6
-Isaac Whitney,0.6
 Gehrig Dieter,0.6
 Javon Wims,0.6
 Brittan Golden,0.5
@@ -215,19 +214,19 @@ Devin Smith,0.5
 Isaiah Ford,0.5
 Braxton Berrios,0.5
 Pharoh Cooper,0.4
-Richie James,0.4
+Richie James Jr.,0.4
 Nick Williams,0.4
 Gunner Olszewski,0.4
 Robert Davis,0.4
-Steven Sims,0.4
+Steven Sims Jr.,0.4
 Nsimba Webster,0.4
 Mike Thomas,0.4
 JoJo Natson,0.3
-Khadarel Hodge,0.3
+KhaDarel Hodge,0.3
 Olamide Zaccheaus,0.2
 Marcus Johnson,0.1
 Noah Brown,0.1
-Matt Slater,0.0
+Matthew Slater,0.0
 Christian McCaffrey,23.7
 Alvin Kamara,23.6
 Saquon Barkley,22.7
@@ -241,20 +240,20 @@ Kerryon Johnson,18.5
 Le'Veon Bell,18.0
 James Conner,17.9
 Austin Ekeler,17.9
-Todd Gurley,16.6
+Todd Gurley II,16.6
 Joe Mixon,16.5
 Josh Jacobs,15.5
 Phillip Lindsay,15.1
 Devonta Freeman,15.0
 Derrick Henry,14.7
-Mark Ingram,14.5
+Mark Ingram II,14.5
 Damien Williams,14.4
 Aaron Jones,13.9
 Sony Michel,13.9
 David Montgomery,13.3
 Marlon Mack,13.3
 Matt Breida,13.0
-Duke Johnson,12.8
+Duke Johnson Jr.,12.8
 James White,12.1
 Tevin Coleman,11.9
 Tarik Cohen,11.2
@@ -274,7 +273,7 @@ Kalen Ballage,7.1
 Latavius Murray,7.1
 Chris Thompson,7.0
 Derrius Guice,6.9
-Darrell Henderson,6.8
+Darrell Henderson Jr.,6.8
 LeSean McCoy,6.7
 Giovani Bernard,6.7
 Nyheim Hines,6.6
@@ -302,7 +301,7 @@ DeAndre Washington,3.0
 Damien Harris,2.7
 Darwin Thompson,2.6
 Kyle Juszczyk,2.5
-Wayne Gallman,2.4
+Wayne Gallman Jr.,2.4
 Devontae Booker,2.2
 Ty Johnson,2.2
 Troymaine Pope,2.1
@@ -334,7 +333,7 @@ Alfred Morris,1.2
 Alex Armah,1.0
 Ameer Abdullah,1.0
 David Fluellen,1.0
-Kerrith Whyte,1.0
+Kerrith Whyte Jr.,1.0
 Samaje Perine,1.0
 T.J. Logan,0.9
 Trenton Cannon,0.9
@@ -349,7 +348,7 @@ Patrick DiMarco,0.8
 Keith Smith,0.8
 Derek Watt,0.8
 Kenjon Barner,0.7
-CJ Ham,0.7
+C.J. Ham,0.7
 Qadree Ollison,0.7
 Zach Line,0.7
 James Develin,0.7
@@ -360,17 +359,8 @@ Roosevelt Nix,0.6
 De'Lance Turner,0.5
 Dwayne Washington,0.5
 Shaun Wilson,0.5
-Garrett Griffin,0.5
 Alec Ingold,0.5
 Patrick Ricard,0.5
-Matthew Dayes,0.4
-Jamize Olawale,0.4
-Cullen Gillaspia,0.4
-Nick Bellore,0.4
-Senorise Perry,0.4
-Dan Vitale,0.3
-Dalyn Dawkins,0.3
-Buddy Howell,0.2
 Travis Kelce,17.2
 George Kittle,16.1
 Zach Ertz,14.7
@@ -479,10 +469,6 @@ Garrett Dickerson,0.2
 Brandon Dillon,0.2
 Pharaoh Brown,0.2
 Hale Hentges,0.2
-Garrett Griffin,0.2
-Johnny Mundt,0.2
-Scott Simonson,0.2
-Deon Yelder,0.0
 Jets ,8.3
 Ravens ,7.9
 Saints ,7.6
