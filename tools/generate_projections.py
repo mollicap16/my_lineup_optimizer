@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import io
 
 week_1_files = "/home/pete/projects/my_lineup_optimizer/data/projections/2019/week1/"
@@ -6,7 +7,7 @@ position_projections = ["FantasyPros_Fantasy_Football_Projections_DST.csv", "Fan
         "FantasyPros_Fantasy_Football_Projections_RB.csv", "FantasyPros_Fantasy_Football_Projections_TE.csv",
         "FantasyPros_Fantasy_Football_Projections_WR.csv"]
 
-dk_player_salaries = "/home/pete/projects/my_lineup_optimizer/data/draft_kings_players_template/DKSalaries.csv"
+dk_player_salaries = "/home/pete/projects/my_lineup_optimizer/data/draft_kings_players_template/DKSalaries_thr-mon_9_5_19.csv"
 
 # Each projection file (QB, RB, WR, TE, and DST)
 qb_file = week_1_files + position_projections[1]
@@ -37,6 +38,17 @@ for data in all_projection_data_frames:
 # Save complete list of players and their projected fantasy points
 players_fpts_data_frame.to_csv(week_1_files+"complete_player_projection.csv", index=False, encoding='utf8')
 
-# Replace "AvgPointsPerGame" in the draft kings template with the projected fantasy pro's "FTPS"
-print(dk_salaries_data.Name)
+#print(dk_salaries_data.loc[dk_salaries_data.Name == 'Alshon Jeffery'])
 
+# Replace "AvgPointsPerGame" in the draft kings template with the projected fantasy pro's "FPTS"
+players_fpts_data_frame = players_fpts_data_frame[np.isfinite(players_fpts_data_frame['FPTS'])]
+for player in players_fpts_data_frame.Player:
+    print(player)
+    player_fpts_value = players_fpts_data_frame.loc[players_fpts_data_frame.Player == player,'FPTS'].values[0]
+    dk_avg_pts_player = dk_salaries_data.loc[dk_salaries_data.Name == player].AvgPointsPerGame.values[0]
+    dk_player_index = dk_salaries_data.index[dk_salaries_data.Name == player].tolist()
+    dk_salaries_data.at[dk_player_index , 'AvgPointsPerGame'] = player_fpts_value
+#    print(player, ": ", player_fpts_value)
+    print(player, ": ", dk_player_index)
+    print(player, ": ", dk_avg_pts_player)
+    print(player, ": ", dk_salaries_data.loc[dk_salaries_data.Name == player].AvgPointsPerGame.values[0])
