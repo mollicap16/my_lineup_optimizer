@@ -1,3 +1,6 @@
+#TODO: This is not complete it is supposed to scrape data from fftoday 
+#      (Might get rid of this tool if the fantasy pros and fantasy football analytic's
+#      projections are better
 import pandas as pd
 from bs4 import BeautifulSoup
 import requests

@@ -40,8 +40,6 @@ for data in all_projection_data_frames:
 # Save complete list of players and their projected fantasy points
 players_fpts_data_frame.to_csv(week_1_files+"complete_player_projection.csv", index=False, encoding='utf8')
 
-#print(dk_salaries_data.loc[dk_salaries_data.Name == 'Alshon Jeffery'])
-
 # Replace "AvgPointsPerGame" in the draft kings template with the projected fantasy pro's "FPTS"
 players_fpts_data_frame = players_fpts_data_frame[np.isfinite(players_fpts_data_frame['FPTS'])]
 for player in players_fpts_data_frame.Player:
