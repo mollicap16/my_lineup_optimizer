@@ -1,7 +1,7 @@
 from pydfs_lineup_optimizer import get_optimizer, Site, Sport
 import pandas
 
-csv_player_path="/home/pete/projects/my_lineup_optimizer/data/draft_kings_players_template/DKSalaries_thr-mon_9_5_19_fan_pro_proj.csv"
+csv_player_path="/home/pete/projects/my_lineup_optimizer/data/draft_kings_players_template/DKSalaries_ffa.csv"
 
 optimizer = get_optimizer(Site.DRAFTKINGS, Sport.FOOTBALL)
 optimizer.load_players_from_csv(csv_player_path)
