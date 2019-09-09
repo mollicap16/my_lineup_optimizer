@@ -26,6 +26,15 @@ index_cutoffs = ffa_data_frame[ffa_data_frame['points'] <= value_threshold].inde
 # drop frames
 ffa_data_frame.drop(index_cutoffs, inplace=True)
 
+# Change team names to match DK Templates
+data_frame_index = 0
+for team in ffa_data_frame.team:
+    if (team == 'JAC'):
+        ffa_data_frame.at[data_frame_index, 'team'] = 'JAX'
+    data_frame_index += 1
+
+
+sys.exit("This is just for development purposes")
 # TODO: Determine if this is the best method. I can forsee potential issues
 # Getting players last names to search against the DK Template (e.g. Marvin Jones vs. Marvin Jones Jr.)
 players = ffa_data_frame['player'].tolist()
@@ -85,8 +94,10 @@ for name in last_names:
     elif (name_count == 1):
         updated_value = ffa_data_frame.iloc[index].points
         pos = ffa_data_frame.iloc[index].position
+        team = ffa_data_frame.iloc[index].team
         matched_names = dk_data_frame[dk_data_frame['Name'].str.contains(name)]
         matched_names = matched_names[matched_names['Position'].str.contains(pos)]
+        matched_names = matched_names[matched_names['TeamAbbrev'].str.contains(team)]
 
         if (matched_names.shape[0] == 1):
             dk_index = dk_data_frame.index[dk_data_frame['Name'].str.contains(name)].tolist()
@@ -96,5 +107,5 @@ for name in last_names:
 
     index += 1
 
-print(new_dk_data_frame)
+#print(new_dk_data_frame)
 new_dk_data_frame.to_csv(update_dk_template, index = False, encoding='utf8')
