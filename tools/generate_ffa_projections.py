@@ -1,7 +1,11 @@
-# TODO: Still a little more work to do:
-#       Handle multiple entries of the same player (e.g. Sterling Shepard & Russel Shepard)
-#       Also refactor, break code up into functions and eventually into a single/multiple
-#       class object(s).
+'''
+TODO: (Still a little more work to do:)
+       1) Handle multiple entries of the same player (e.g. Sterling Shepard & Russel Shepard)
+       2) Also refactor, break code up into functions and eventually into a single/multiple
+          class object(s).
+       3) Handle File locations - so we dont need to change it everytime week to week 
+          (possibly providing arguments to provide specific week and tournament data)
+'''
 import pandas as pd
 import numpy as np
 import io
