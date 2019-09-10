@@ -1,6 +1,5 @@
-# TODO: Still a little more work to do (mixed up Jimmy Grahmn & Jadaen Grahmn)
-#       Remove ' from names in the DKSalaries.csv file (error on James O'Shaughnessy)
-#       Secondly handle multiple entries of the same player (e.g. Sterling Shepard & Russel Shepard)
+# TODO: Still a little more work to do:
+#       Handle multiple entries of the same player (e.g. Sterling Shepard & Russel Shepard)
 #       Also refactor, break code up into functions and eventually into a single/multiple
 #       class object(s).
 import pandas as pd
@@ -29,6 +28,22 @@ index_cutoffs = ffa_data_frame[ffa_data_frame['points'] <= value_threshold].inde
 # drop frames
 ffa_data_frame.drop(index_cutoffs, inplace=True)
 
+# Filter last names to remove ' from last names
+excluded_character = '\''
+last_names = list()
+list_index = 0
+dk_frame_index = 0
+for names in dk_data_frame.Name:
+    if (len(names.split()) > 1):
+        last_names.append(names.split()[1])
+        if (last_names[list_index].find(excluded_character) >= 0):
+#            print(last_names[list_index])
+#            print(last_names[list_index].replace(excluded_character, ''))
+            dk_data_frame.at[dk_frame_index, 'Name'] = names.replace(excluded_character,'')
+#            print(dk_data_frame.iloc[dk_frame_index])
+        list_index += 1
+    dk_frame_index += 1
+
 # Change team names to match DK Templates
 data_frame_index = 0
 for team in ffa_data_frame.team:
@@ -36,8 +51,6 @@ for team in ffa_data_frame.team:
         ffa_data_frame.at[data_frame_index, 'team'] = 'JAX'
     data_frame_index += 1
 
-# TODO: Determine if this is the best method. I can forsee potential issues
-# Getting players last names to search against the DK Template (e.g. Marvin Jones vs. Marvin Jones Jr.)
 players = ffa_data_frame['player'].tolist()
 last_names = list()
 for player in players:
