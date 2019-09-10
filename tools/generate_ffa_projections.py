@@ -1,5 +1,8 @@
-# TODO: Still a little more work to do (mixed up Jimmy Grahmn and Jadaen Grahmn)
-#       Also JAX vs JAC in the two data sets (may want to pre process this in the begining)
+# TODO: Still a little more work to do (mixed up Jimmy Grahmn & Jadaen Grahmn)
+#       Remove ' from names in the DKSalaries.csv file (error on James O'Shaughnessy)
+#       Secondly handle multiple entries of the same player (e.g. Sterling Shepard & Russel Shepard)
+#       Also refactor, break code up into functions and eventually into a single/multiple
+#       class object(s).
 import pandas as pd
 import numpy as np
 import io
@@ -33,8 +36,6 @@ for team in ffa_data_frame.team:
         ffa_data_frame.at[data_frame_index, 'team'] = 'JAX'
     data_frame_index += 1
 
-
-sys.exit("This is just for development purposes")
 # TODO: Determine if this is the best method. I can forsee potential issues
 # Getting players last names to search against the DK Template (e.g. Marvin Jones vs. Marvin Jones Jr.)
 players = ffa_data_frame['player'].tolist()
@@ -82,7 +83,13 @@ for name in last_names:
                 else:
                     print("WARNING: Not in FFA projections list: ", dk_name, "Possible points = ", ffa_data_frame.iloc[index].points)
                     matched_dk_index = dk_data_frame.index[dk_data_frame.Name == dk_name].tolist()
-                    dk_data_frame.at[matched_dk_index, 'AvgPointsPerGame'] = 0.0
+                    first_name = dk_data_frame.iloc[matched_dk_index].Name.tolist()[0].split()[0]
+                    first_name_ffa = ffa_data_frame.iloc[index].player.split()[0]
+                    print(first_name, " : ", first_name_ffa, " = ", ffa_data_frame.iloc[index].points)
+                    if (first_name_ffa == first_name):
+                        dk_data_frame.at[matched_dk_index, 'AvgPointsPerGame'] = ffa_data_frame.iloc[index].points 
+                    else:
+                        dk_data_frame.at[matched_dk_index, 'AvgPointsPerGame'] = 0.0
                     new_dk_data_frame = new_dk_data_frame.append([dk_data_frame.iloc[matched_dk_index]])
         elif (matched_names.shape[0] == 1):
             updated_value = ffa_data_frame.iloc[index].points
