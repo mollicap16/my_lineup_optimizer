@@ -12,14 +12,15 @@ import io
 import sys
 
 # Define file locations
-week = 'week1'
-ffa_projections = '/home/pete/Documents/projection_downloads/ff_analytics/WEEK/ffa_customrankings2019-1.csv'
-dk_salaries_template = '/home/pete/Documents/dk_player_exports/WEEK/sun_12_teams/DKSalaries.csv'
-update_dk_template = '/home/pete/Documents/dk_player_exports/WEEK/sun_12_teams/DKSalaries_ffa.csv'
+week = 'week2'
+tournament_type = 'sun-mon'
+ffa_projections = '/home/pete/Documents/projection_downloads/ff_analytics/WEEK/ffa_customrankings2019-2.csv'
+dk_salaries_template = '/home/pete/Documents/dk_player_exports/WEEK/TOURNAMENT/DKSalaries.csv'
+update_dk_template = '/home/pete/Documents/dk_player_exports/WEEK/TOURNAMENT/DKSalaries_ffa.csv'
 
 ffa_projections = ffa_projections.replace("WEEK", week)
-dk_salaries_template = dk_salaries_template.replace("WEEK", week)
-update_dk_template = update_dk_template.replace("WEEK", week)
+dk_salaries_template = dk_salaries_template.replace("WEEK", week).replace("TOURNAMENT", tournament_type)
+update_dk_template = update_dk_template.replace("WEEK", week).replace("TOURNAMENT", tournament_type)
 
 '''
 Preprocess data so projections are not thrown off. In order for the projection to be correctly updated, 
