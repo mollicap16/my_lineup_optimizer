@@ -1,7 +1,13 @@
+import sys
+import pandas as pd
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from pydfs_lineup_optimizer import get_optimizer, Site, Sport 
+
+# Global Variables
+player_file = ''
+ffa_player_projections = pd.DataFrame()
 
 # Creating Main window object
 main_window = tk.Tk()
@@ -23,7 +29,6 @@ main_window.columnconfigure(0, weight=1)
 main_window.rowconfigure(1, weight =1)
 
 # Labels
-load_label_text="";
 load_label = ttk.Label(top_frame, text="empty", background='white', relief='groove', width=50)
 load_label.grid(column=1, row=0, sticky="E")
 test_label = ttk.Label(middle_frame, text="HELLO WORLD")
@@ -31,10 +36,14 @@ test_label.grid(column=0, row=0, sticky='W')
 
 # Button Commands
 def load_click():
-    file_load = filedialog.askopenfilename()
-    load_label.configure(text=file_load, width=0)
+    player_file = filedialog.askopenfilename(initialdir = "/home/pete/Documents/dk_player_exports/")
+    load_label.configure(text=player_file, width=0)
     save_button.state(['disabled'])
     optimize_button.state(['!disabled'])
+    try:
+        ffa_player_projections = pd.read_csv(player_file)
+    except:
+        sys.exit("Invalid file type")
 
 def optimize_click():
     save_button.state(['!disabled'])
