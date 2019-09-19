@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from pydfs_lineup_optimizer import get_optimizer, Site, Sport 
+from modules.tables import createStandardTable as cst
 
 # Global Variables
 player_file = ''
@@ -12,6 +13,8 @@ ffa_player_projections = pd.DataFrame()
 # Creating Main window object
 main_window = tk.Tk()
 main_window.title("Lineup Optimizer")
+
+ttk.Sizegrip(main_window).grid(column=999, row=999, sticky=('SE'))
 
 # TODO: Might want to remove borderwidth and relief for frames
 # Frames
@@ -31,8 +34,8 @@ main_window.rowconfigure(1, weight =1)
 # Labels
 load_label = ttk.Label(top_frame, text="empty", background='white', relief='groove', width=50)
 load_label.grid(column=1, row=0, sticky="E")
-test_label = ttk.Label(middle_frame, text="HELLO WORLD")
-test_label.grid(column=0, row=0, sticky='W')
+#test_label = ttk.Label(middle_frame, text="HELLO WORLD")
+#test_label.grid(column=0, row=0, sticky='W')
 
 # Button Commands
 def load_click():
@@ -44,6 +47,8 @@ def load_click():
         ffa_player_projections = pd.read_csv(player_file)
     except:
         sys.exit("Invalid file type")
+    table = cst(player_file, middle_frame)
+    table.grid(column=0, row=0)
 
 def optimize_click():
     save_button.state(['!disabled'])
