@@ -12,13 +12,14 @@ import io
 import sys
 
 # Define file locations
-week = 'week2'
-tournament_type = 'sun-1pm'
-ffa_projections = '/home/pete/Documents/projection_downloads/ff_analytics/WEEK/ffa_customrankings2019-2.csv'
+week = 'week3'
+tournament_type = 'sun-mon'
+week_ranking = '3'
+ffa_projections = '/home/pete/Documents/projection_downloads/ff_analytics/WEEK/ffa_customrankings2019-RANKING.csv'
 dk_salaries_template = '/home/pete/Documents/dk_player_exports/WEEK/TOURNAMENT/DKSalaries.csv'
 update_dk_template = '/home/pete/Documents/dk_player_exports/WEEK/TOURNAMENT/DKSalaries_ffa.csv'
 
-ffa_projections = ffa_projections.replace("WEEK", week)
+ffa_projections = ffa_projections.replace("WEEK", week).replace("RANKING", week_ranking)
 dk_salaries_template = dk_salaries_template.replace("WEEK", week).replace("TOURNAMENT", tournament_type)
 update_dk_template = update_dk_template.replace("WEEK", week).replace("TOURNAMENT", tournament_type)
 

@@ -1,7 +1,7 @@
 from pydfs_lineup_optimizer import get_optimizer, Site, Sport, CSVLineupExporter
 import pandas
 
-week = 'week2'
+week = 'week3'
 tournament = 'sun-1pm'
 csv_player_path="/home/pete/Documents/dk_player_exports/WEEK/TOURNAMENT/DKSalaries_ffa.csv"
 lineups_file="/home/pete/Documents/dk_lineups/WEEK/TOURNAMENT/results.csv"
@@ -11,7 +11,7 @@ lineups_file = lineups_file.replace("WEEK", week).replace("TOURNAMENT", tourname
 
 optimizer = get_optimizer(Site.DRAFTKINGS, Sport.FOOTBALL)
 optimizer.load_players_from_csv(csv_player_path)
-number_of_lineups = 15 
+number_of_lineups = 20 
 for lineup in optimizer.optimize(number_of_lineups):
     print(lineup)
 #    print(lineup.players)

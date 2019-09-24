@@ -4,7 +4,6 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from pydfs_lineup_optimizer import get_optimizer, Site, Sport 
-from modules.tables import createStandardTable as cst
 
 # Global Variables
 player_file = ''
