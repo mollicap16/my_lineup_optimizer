@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from pydfs_lineup_optimizer import get_optimizer, Site, Sport 
+from pandastable import Table
 
 # Global Variables
 player_file = ''
@@ -33,8 +34,6 @@ main_window.rowconfigure(1, weight =1)
 # Labels
 load_label = ttk.Label(top_frame, text="empty", background='white', relief='groove', width=50)
 load_label.grid(column=1, row=0, sticky="E")
-#test_label = ttk.Label(middle_frame, text="HELLO WORLD")
-#test_label.grid(column=0, row=0, sticky='W')
 
 # Button Commands
 def load_click():
@@ -46,8 +45,9 @@ def load_click():
         ffa_player_projections = pd.read_csv(player_file)
     except:
         sys.exit("Invalid file type")
-    table = cst(player_file, middle_frame)
+    table = Table(middle_frame, dataframe=ffa_player_projections)
     table.grid(column=0, row=0)
+    table.show()
 
 def optimize_click():
     save_button.state(['!disabled'])
