@@ -6,9 +6,17 @@ from tkinter import filedialog
 from pydfs_lineup_optimizer import get_optimizer, Site, Sport 
 from pandastable import Table
 
+# Helper Methods
+def LoadOptimizer(filename):
+    try:
+        optimizer.load_players_from_csv(filename)
+    except: 
+        sys.exit('Invalid csv file format')
+
 # Global Variables
 player_file = ''
 ffa_player_projections = pd.DataFrame()
+optimizer = get_optimizer(Site.DRAFTKINGS, Sport.FOOTBALL)
 
 # Creating Main window object
 main_window = tk.Tk()
@@ -43,6 +51,7 @@ def load_click():
     optimize_button.state(['!disabled'])
     try:
         ffa_player_projections = pd.read_csv(player_file)
+        LoadOptimizer(player_file)
     except:
         sys.exit("Invalid file type")
     table = Table(middle_frame, dataframe=ffa_player_projections)
