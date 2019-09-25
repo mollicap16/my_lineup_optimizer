@@ -12,6 +12,11 @@ def LoadOptimizer(filename):
     except: 
         sys.exit('Invalid csv file format')
 
+def AddValueColumn(player_efficiency):
+    players = optimizer.players
+    for player in players:
+        player_efficiency.append(player.efficiency*1000)
+
 # Global Variables
 player_file = ''
 ffa_player_projections = pd.DataFrame()
@@ -48,6 +53,9 @@ def load_click():
     try:
         ffa_player_projections = pd.read_csv(player_file)
         LoadOptimizer(player_file)
+        player_value = []
+        AddValueColumn(player_value)
+        ffa_player_projections = ffa_player_projections.assign(Value = player_value)
     except:
         sys.exit("Invalid file type")
     table = Table(middle_frame, dataframe=ffa_player_projections)
@@ -55,8 +63,15 @@ def load_click():
     table.show()
 
 def optimize_click():
+    lineups = optimizer.optimize(int(num_lineups.get()))
+    progress_bar['value'] = 0
+    progress_bar['maximum'] = int(num_lineups.get())
+    for lineup in lineups:
+        progress_bar.start()
+        print(lineup)
+        progress_bar['value'] += 1
+        progress_bar.stop()
     save_button.state(['!disabled'])
-    print("Optimize")
 
 def save_click():
     print("Save Lineups")
@@ -65,24 +80,28 @@ def save_click():
 # Labels
 load_label = ttk.Label(top_frame, text="empty", background='white', relief='groove', width=50)
 load_label.grid(column=1, row=0, sticky='E')
-num_lineup_label = ttk.Label(top_frame, text="Number of Lineups")
+num_lineup_label = ttk.Label(bottom_frame, text="Number of Lineups")
 num_lineup_label.grid(column=3, row=0, sticky='W')
 
 # Entries
 num_lineups = tk.StringVar() 
 num_lineups.set(20)
-num_of_lineups_entry = ttk.Entry(top_frame, textvariable=num_lineups, justify='right', width=10)
-num_of_lineups_entry.grid(column=2, row=0, sticky='W', padx=15)
+num_of_lineups_entry = ttk.Entry(bottom_frame, textvariable=num_lineups, justify='center', width=10)
+num_of_lineups_entry.grid(column=2, row=0, sticky='W', padx=(25,5))
 
 # Buttons
 load_button = ttk.Button(top_frame, text="Load", command=load_click)
 load_button.grid(column=0, row=0, sticky="W")
 
 optimize_button = ttk.Button(bottom_frame, text="Optimize Lineups", command=optimize_click, state='disabled')
-optimize_button.grid(column=2, row=0, sticky="E")
+optimize_button.grid(column=1, row=0, sticky="E")
 
 save_button = ttk.Button(bottom_frame, text="Save Lineups", command=save_click, state='disabled')
 save_button.grid(column=0, row=0, sticky="W")
+
+# Progressbar
+progress_bar = ttk.Progressbar(bottom_frame, orient='horizontal', mode='determinate')
+progress_bar.grid(column=5, row=0, padx=20)
 
 # Calling mainloop
 main_window.mainloop();

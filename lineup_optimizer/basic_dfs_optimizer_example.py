@@ -1,8 +1,8 @@
 from pydfs_lineup_optimizer import get_optimizer, Site, Sport, CSVLineupExporter
 import pandas
 
-week = 'week3'
-tournament = 'sun-1pm'
+week = 'week4'
+tournament = 'thur-mon'
 csv_player_path="/home/pete/Documents/dk_player_exports/WEEK/TOURNAMENT/DKSalaries_ffa.csv"
 lineups_file="/home/pete/Documents/dk_lineups/WEEK/TOURNAMENT/results.csv"
 
