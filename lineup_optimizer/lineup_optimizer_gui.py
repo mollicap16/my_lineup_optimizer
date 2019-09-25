@@ -1,8 +1,7 @@
 import sys
 import pandas as pd
 import tkinter as tk
-from tkinter import ttk
-from tkinter import filedialog
+from tkinter import ttk, filedialog, StringVar
 from pydfs_lineup_optimizer import get_optimizer, Site, Sport 
 from pandastable import Table
 
@@ -39,12 +38,9 @@ bottom_frame.grid(column=0, row=2, sticky=('N', 'W', 'E', 'S'))
 main_window.columnconfigure(0, weight=1)
 main_window.rowconfigure(1, weight =1)
 
-# Labels
-load_label = ttk.Label(top_frame, text="empty", background='white', relief='groove', width=50)
-load_label.grid(column=1, row=0, sticky="E")
-
 # Button Commands
 def load_click():
+    print(int(num_lineups.get()))
     player_file = filedialog.askopenfilename(initialdir = "/home/pete/Documents/dk_player_exports/")
     load_label.configure(text=player_file, width=0)
     save_button.state(['disabled'])
@@ -65,6 +61,18 @@ def optimize_click():
 def save_click():
     print("Save Lineups")
     save_button.state(['disabled'])
+
+# Labels
+load_label = ttk.Label(top_frame, text="empty", background='white', relief='groove', width=50)
+load_label.grid(column=1, row=0, sticky='E')
+num_lineup_label = ttk.Label(top_frame, text="Number of Lineups")
+num_lineup_label.grid(column=3, row=0, sticky='W')
+
+# Entries
+num_lineups = tk.StringVar() 
+num_lineups.set(20)
+num_of_lineups_entry = ttk.Entry(top_frame, textvariable=num_lineups, justify='right', width=10)
+num_of_lineups_entry.grid(column=2, row=0, sticky='W', padx=15)
 
 # Buttons
 load_button = ttk.Button(top_frame, text="Load", command=load_click)
