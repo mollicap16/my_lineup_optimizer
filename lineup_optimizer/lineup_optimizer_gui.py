@@ -2,7 +2,7 @@ import sys
 import pandas as pd
 import tkinter as tk
 from tkinter import ttk, filedialog, StringVar
-from pydfs_lineup_optimizer import get_optimizer, Site, Sport 
+from pydfs_lineup_optimizer import get_optimizer, Site, Sport, CSVLineupExporter 
 from pandastable import Table
 
 # Helper Methods
@@ -17,10 +17,17 @@ def AddValueColumn(player_efficiency):
     for player in players:
         player_efficiency.append(player.efficiency*1000)
 
+def DraftKingsRefromatting(filename):
+    try:
+        results_df = pd.read_csv(filename)
+    except:
+        sys.exit('Failed to save %s' % filename)
+    print('Saved: %s' % filename )
+
 # Global Variables
 player_file = ''
 ffa_player_projections = pd.DataFrame()
-optimizer = get_optimizer(Site.DRAFTKINGS, Sport.FOOTBALL)
+optimizer = get_optimizer(Site.DRAFTKINGS, Sport.FOOTBALL) 
 
 # Creating Main window object
 main_window = tk.Tk()
@@ -45,8 +52,7 @@ main_window.rowconfigure(1, weight =1)
 
 # Button Commands
 def load_click():
-    print(int(num_lineups.get()))
-    player_file = filedialog.askopenfilename(initialdir = "/home/pete/Documents/dk_player_exports/")
+    player_file = filedialog.askopenfilename(initialdir = "/home/pete/Documents/dk_player_exports/", title='Select Projections')
     load_label.configure(text=player_file, width=0)
     save_button.state(['disabled'])
     optimize_button.state(['!disabled'])
@@ -67,14 +73,16 @@ def optimize_click():
     progress_bar['value'] = 0
     progress_bar['maximum'] = int(num_lineups.get())
     for lineup in lineups:
-        progress_bar.start()
         print(lineup)
         progress_bar['value'] += 1
-        progress_bar.stop()
+        main_window.update()
     save_button.state(['!disabled'])
 
 def save_click():
-    print("Save Lineups")
+    results = filedialog.asksaveasfilename(initialdir = '/home/pete/Documents/dk_lineups', title = 'Save File', initialfile = 'results.csv')
+    exporter = CSVLineupExporter(optimizer.optimize(int(num_lineups.get())))
+    exporter.export(results)
+    DraftKingsRefromatting(results)
     save_button.state(['disabled'])
 
 # Labels

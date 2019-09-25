@@ -48,10 +48,7 @@ for names in dk_data_frame.Name:
     if (len(names.split()) > 1):
         last_names.append(names.split()[1])
         if (last_names[list_index].find(excluded_character) >= 0):
-#            print(last_names[list_index])
-#            print(last_names[list_index].replace(excluded_character, ''))
             dk_data_frame.at[dk_frame_index, 'Name'] = names.replace(excluded_character,'')
-#            print(dk_data_frame.iloc[dk_frame_index])
         list_index += 1
     dk_frame_index += 1
 
@@ -77,8 +74,6 @@ if (len(last_names) != len(players)):
 new_dk_data_frame = pd.DataFrame()
 index = 0
 for name in last_names:
-#    print(name)
-#    print(dk_data_frame['Name'].str.count(name).sum())
     name_count = dk_data_frame['Name'].str.count(name).sum()
     # If name_count == 0 they dont have a game in the dk_template
     if (name_count > 1 ):
@@ -87,7 +82,6 @@ for name in last_names:
         matched_names = dk_data_frame[dk_data_frame['Name'].str.contains(name)]
         matched_names = matched_names[matched_names['Position'].str.contains(pos)]
         matched_names = matched_names[matched_names['TeamAbbrev'].str.contains(team)]
-#        print("name_count = ",name_count, ", Matched names = ",matched_names.shape[0])
 
         # Same last name at the same position on the same team. Which means we now need
         # to cross reference it to the ffa_data_frame
