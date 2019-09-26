@@ -18,11 +18,16 @@ def AddValueColumn(player_efficiency):
         player_efficiency.append(player.efficiency*1000)
 
 def DraftKingsRefromatting(filename):
+    results_df = pd.DataFrame()
     try:
         results_df = pd.read_csv(filename)
     except:
         sys.exit('Failed to save %s' % filename)
-    print('Saved: %s' % filename )
+    results_df = results_df[['QB','RB1', 'RB2', 'WR1', 'WR2', 'WR3','TE', 'FLEX', 'DST']]
+    results_df.columns = ['QB', 'RB', 'RB', 'WR', 'WR', 'WR', 'TE', 'FLEX', 'DST']
+    filename = filename.split('.')[0]
+    results_df.to_csv(filename+'_DK_Format.csv', index=False)
+    print('Saved: %s' % filename+'_DK_Format.csv')
 
 # Global Variables
 player_file = ''
@@ -109,7 +114,7 @@ save_button.grid(column=0, row=0, sticky="W")
 
 # Progressbar
 progress_bar = ttk.Progressbar(bottom_frame, orient='horizontal', mode='determinate')
-progress_bar.grid(column=5, row=0, padx=20)
+progress_bar.grid(column=4, row=0, padx=20, sticky='E')
 
 # Calling mainloop
 main_window.mainloop();
