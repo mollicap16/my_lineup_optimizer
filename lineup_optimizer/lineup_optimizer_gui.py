@@ -1,7 +1,7 @@
 import sys
 import pandas as pd
 import tkinter as tk
-from tkinter import ttk, filedialog, StringVar
+from tkinter import ttk, filedialog, StringVar 
 from pydfs_lineup_optimizer import get_optimizer, Site, Sport, CSVLineupExporter 
 from pandastable import Table
 
@@ -70,7 +70,7 @@ def load_click():
     except:
         sys.exit("Invalid file type")
     table = Table(middle_frame, dataframe=ffa_player_projections)
-    table.grid(column=0, row=0)
+    table.grid(column=0, row=0, rowspan=2)
     table.show()
 
 def optimize_click():
@@ -89,6 +89,12 @@ def save_click():
     exporter.export(results)
     DraftKingsRefromatting(results)
     save_button.state(['disabled'])
+
+# list box
+#locked_player_list = tk.Listbox(middle_frame)
+#locked_player_list.grid(column = 1, row = 0)
+#excluded_player_list = tk.Listbox(middle_frame)
+#excluded_player_list.grid(column = 1, row = 1)
 
 # Labels
 load_label = ttk.Label(top_frame, text="empty", background='white', relief='groove', width=50)
