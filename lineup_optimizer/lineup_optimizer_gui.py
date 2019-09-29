@@ -74,6 +74,10 @@ def load_click():
     table.show()
 
 def optimize_click():
+#    excluded_player = optimizer.get_player_by_name('Terry McLaurin')
+#    excluded_player2 = optimizer.get_player_by_name('Devin Singletary')
+#    optimizer.remove_player(excluded_player)
+#    optimizer.remove_player(excluded_player2)
     lineups = optimizer.optimize(int(num_lineups.get()))
     progress_bar['value'] = 0
     progress_bar['maximum'] = int(num_lineups.get())

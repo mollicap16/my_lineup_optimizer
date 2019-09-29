@@ -13,7 +13,7 @@ import sys
 
 # Define file locations
 week = 'week4'
-tournament_type = 'thur-mon'
+tournament_type = 'sun-1pm'
 week_ranking = '4'
 ffa_projections = '/home/pete/Documents/projection_downloads/ff_analytics/WEEK/ffa_customrankings2019-RANKING.csv'
 dk_salaries_template = '/home/pete/Documents/dk_player_exports/WEEK/TOURNAMENT/DKSalaries.csv'
