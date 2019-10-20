@@ -29,6 +29,28 @@ def DraftKingsRefromatting(filename):
     results_df.to_csv(filename+'_DK_Format.csv', index=False)
     print('Saved: %s' % filename+'_DK_Format.csv')
 
+def LockPlayers():
+    for player_name in locked_player_list:
+        player = optimizer.get_player_by_name(player_name)
+        optimizer.add_player_to_lineup(player)
+
+def ExcludePlayers():
+    for player_name in excluded_player_list:
+        player = optimizer.get_player_by_name(player_name)
+        print(player)
+        optimizer.remove_player(player)
+
+def RestorePlayers():
+    # Unlock Players
+    for player_name in locked_player_list:
+        player = optimizer.get_player_by_name(player_name)
+        optimizer.remove_player_from_lineup(player)
+
+    # Include Players back into the lineup
+    for player_name in excluded_player_list:
+        player = optimizer.get_player_by_name(player_name)
+        optimizer.restore_player(player)
+
 # Global Variables
 player_file = ''
 ffa_player_projections = pd.DataFrame()
@@ -94,11 +116,8 @@ def load_click():
 
 
 def optimize_click():
-    # TODO: Add helper functions to add excluded and locked players to the optimizer
-#    excluded_player = optimizer.get_player_by_name('Terry McLaurin')
-#    excluded_player2 = optimizer.get_player_by_name('Devin Singletary')
-#    optimizer.remove_player(excluded_player)
-#    optimizer.remove_player(excluded_player2)
+    LockPlayers()
+    ExcludePlayers()
     lineups = optimizer.optimize(int(num_lineups.get()))
     progress_bar['value'] = 0
     progress_bar['maximum'] = int(num_lineups.get())
@@ -107,6 +126,7 @@ def optimize_click():
         progress_bar['value'] += 1
         main_window.update()
     save_button.state(['!disabled'])
+    RestorePlayers()
 
 def save_click():
     results = filedialog.asksaveasfilename(initialdir = '/home/pete/Documents/dk_lineups', title = 'Save File', initialfile = 'results.csv')
@@ -124,7 +144,6 @@ def add_locked_player_click():
     locked_player_listbox.delete(0,'end')
     for item in locked_player_list:
         locked_player_listbox.insert('end', item)
-    print(locked_player_list)
 
 def remove_locked_player_click():
     player = locked_player_listbox.get('active')
@@ -134,7 +153,6 @@ def remove_locked_player_click():
     locked_player_listbox.delete(0,'end')
     for item in locked_player_list:
         locked_player_listbox.insert('end', item)
-    print(locked_player_list)
 
 def add_excluded_player_click():
     row = table.getSelectedRow()
@@ -145,7 +163,6 @@ def add_excluded_player_click():
     excluded_player_listbox.delete(0,'end')
     for item in excluded_player_list:
         excluded_player_listbox.insert('end', item)
-    print(excluded_player_list)
 
 def remove_excluded_player_click():
     player = excluded_player_listbox.get('active')
@@ -155,7 +172,6 @@ def remove_excluded_player_click():
     excluded_player_listbox.delete(0,'end')
     for item in excluded_player_list:
         excluded_player_listbox.insert('end', item)
-    print(excluded_player_list)
 
 # list box
 locked_player_listbox = tk.Listbox(locked_player_frame, height=10)
