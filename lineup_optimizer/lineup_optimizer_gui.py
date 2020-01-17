@@ -130,6 +130,8 @@ def optimize_click():
 
 def save_click():
     results = filedialog.asksaveasfilename(initialdir = '/home/pete/Documents/dk_lineups', title = 'Save File', initialfile = 'results.csv')
+    LockPlayers()
+    ExcludePlayers()
     exporter = CSVLineupExporter(optimizer.optimize(int(num_lineups.get())))
     exporter.export(results)
     DraftKingsRefromatting(results)
