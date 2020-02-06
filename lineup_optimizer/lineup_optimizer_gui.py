@@ -1,12 +1,17 @@
 import sys
 import pandas as pd
 import tkinter as tk
-from tkinter import ttk, filedialog, StringVar 
+from tkinter import ttk, filedialog, StringVar, IntVar 
 from pydfs_lineup_optimizer import get_optimizer, Site, Sport, CSVLineupExporter 
 from pandastable import Table
 
 # Helper Methods
 def LoadOptimizer(filename):
+    global optimizer
+    if (selected_sport.get() == 1):
+        optimizer = get_optimizer(Site.DRAFTKINGS, Sport.FOOTBALL)
+    elif (selected_sport.get() == 2):
+        optimizer = get_optimizer(Site.DRAFTKINGS, Sport.HOCKEY)
     try:
         optimizer.load_players_from_csv(filename)
     except: 
@@ -54,7 +59,7 @@ def RestorePlayers():
 # Global Variables
 player_file = ''
 ffa_player_projections = pd.DataFrame()
-optimizer = get_optimizer(Site.DRAFTKINGS, Sport.FOOTBALL) 
+optimizer = get_optimizer(Site.DRAFTKINGS, Sport.FOOTBALL)
 locked_player_list=[]
 excluded_player_list=[]
 
@@ -62,7 +67,12 @@ excluded_player_list=[]
 main_window = tk.Tk()
 main_window.title("Lineup Optimizer")
 
+selected_sport = tk.IntVar(main_window, value=1)
+
 ttk.Sizegrip(main_window).grid(column=999, row=999, sticky=('SE'))
+
+# Menu
+menubar = tk.Menu(main_window)
 
 # TODO: Might want to remove borderwidth and relief for frames
 # Frames
@@ -175,6 +185,15 @@ def remove_excluded_player_click():
     for item in excluded_player_list:
         excluded_player_listbox.insert('end', item)
 
+# Menubar
+filemenu = tk.Menu(menubar, tearoff=0)
+sportsmenu = tk.Menu(menubar, tearoff=0)
+sportsmenu.add_radiobutton(label="NFL", value=1, variable=selected_sport)
+sportsmenu.add_radiobutton(label="NHL", value=2, variable=selected_sport)
+
+menubar.add_cascade(label='File', menu=filemenu)
+menubar.add_cascade(label='Select Sport', menu = sportsmenu)
+
 # list box
 locked_player_listbox = tk.Listbox(locked_player_frame, height=10)
 locked_player_listbox.grid(column = 0, row = 1, columnspan=2, sticky=('N', 'W', 'E', 'S'))
@@ -224,4 +243,5 @@ progress_bar = ttk.Progressbar(bottom_frame, orient='horizontal', mode='determin
 progress_bar.grid(column=4, row=0, padx=20, sticky='E')
 
 # Calling mainloop
+main_window.config(menu=menubar)
 main_window.mainloop();
