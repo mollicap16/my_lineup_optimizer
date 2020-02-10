@@ -4,7 +4,7 @@ import io
 import sys
 
 # Define file locations
-date = '2020-02-01'
+date = '2020-02-08'
 nhl_projections = '/home/pete/Documents/nhl/projection_downloads/DFF_NHL_cheatsheet_DATE.csv'
 dk_salaries_template = '/home/pete/Documents/nhl/dk_player_exports/DATE/DKSalaries.csv'
 update_dk_template = '/home/pete/Documents/nhl/dk_player_exports/DATE/DKSalaries_dff.csv'
@@ -23,10 +23,15 @@ index_cutoffs = nhl_data_frame[nhl_data_frame['ppg_projection'] <= value_thresho
 # drop frames
 nhl_data_frame.drop(index_cutoffs, inplace=True)
 
-# TODO: Might not need to match the team abbreviations
 # Change team names to match DK Templates
 data_frame_index = 0
 for team in nhl_data_frame.team:
+    if (team == 'CBJ'):
+        nhl_data_frame.at[data_frame_index, 'team'] = 'CLS'
+    if (team == 'MTL'):
+        nhl_data_frame.at[data_frame_index, 'team'] = 'MON'
+    if (team == 'WSH'):
+        nhl_data_frame.at[data_frame_index, 'team'] = 'WAS'
     if (team == 'SJS'):
         nhl_data_frame.at[data_frame_index, 'team'] = 'SJ'
     if (team == 'NJD'):
@@ -53,8 +58,20 @@ index = 0
 for name in names:
     name_count = dk_data_frame['Name'].str.count(name).sum()
     if (name_count > 1):
-        # TODO: If we incounter this, compare names, pos, and teams
-        sys.exit("ERROR: Multiple Players with the same name (", name,")")
+        projected_points = nhl_data_frame.iloc[index].ppg_projection
+        team = nhl_data_frame.iloc[index].team
+        pos = nhl_data_frame.iloc[index].position
+        matched_players = dk_data_frame[dk_data_frame['Name'].str.contains(name)]
+        matched_players = matched_players[matched_players['TeamAbbrev'].str.contains(team)]
+        matched_players = matched_players[matched_players['Position'].str.contains(pos)]
+
+        if (matched_players.shape[0] > 1):
+            print("ERROR: Multiple Players with the same name (", name,")")
+            sys.exit()
+        else:
+            dk_index = matched_players[matched_players['Name'].str.contains(name)].index.values[0]
+            new_dk_data_frame = new_dk_data_frame.append(matched_players[matched_players['Name'].str.contains(name)])
+            new_dk_data_frame.at[dk_index,'AvgPointsPerGame'] = projected_points
     else:
         projected_points = nhl_data_frame.iloc[index].ppg_projection
         dk_index = dk_data_frame[dk_data_frame['Name'].str.contains(name)].index.values[0]
