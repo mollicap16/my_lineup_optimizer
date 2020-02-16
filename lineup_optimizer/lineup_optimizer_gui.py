@@ -25,11 +25,16 @@ def AddValueColumn(player_efficiency):
 def DraftKingsRefromatting(filename):
     results_df = pd.DataFrame()
     try:
-        results_df = pd.read_csv(filename)
+         results_df = pd.read_csv(filename)
     except:
         sys.exit('Failed to save %s' % filename)
-    results_df = results_df[['QB','RB1', 'RB2', 'WR1', 'WR2', 'WR3','TE', 'FLEX', 'DST']]
-    results_df.columns = ['QB', 'RB', 'RB', 'WR', 'WR', 'WR', 'TE', 'FLEX', 'DST']
+    if (selected_sport.get() == 1):
+        results_df = results_df[['QB','RB1', 'RB2', 'WR1', 'WR2', 'WR3','TE', 'FLEX', 'DST']]
+        results_df.columns = ['QB', 'RB', 'RB', 'WR', 'WR', 'WR', 'TE', 'FLEX', 'DST']
+    elif (selected_sport.get() == 2):
+        results_df = results_df[['C', 'C.1', 'W', 'W.1', 'W.2', 'D', 'D.1', 'G', 'UTIL']]
+        results_df.columns = ['C', 'C', 'W', 'W', 'W', 'D', 'D', 'G', 'UTIL']
+
     filename = filename.split('.')[0]
     results_df.to_csv(filename+'_DK_Format.csv', index=False)
     print('Saved: %s' % filename+'_DK_Format.csv')
@@ -102,7 +107,15 @@ table = Table(middle_left_frame)
 
 # Button Commands
 def load_click():
-    player_file = filedialog.askopenfilename(initialdir = "/home/pete/Documents/dk_player_exports/", title='Select Projections')
+    init_dir = ""
+    if (selected_sport.get()==1):
+        init_dir = "/home/pete/Documents/dk_player_exports/"
+    elif (selected_sport.get()==2):
+        init_dir = "/home/pete/Documents/nhl/dk_player_exports/"
+    else:
+        sys.exit("INVALID SPORT SELECTED")
+    player_file = filedialog.askopenfilename(initialdir = init_dir, title='Select Projections')
+    print(player_file)
     load_label.configure(text=player_file, width=0)
     save_button.state(['disabled'])
     optimize_button.state(['!disabled'])
@@ -139,7 +152,12 @@ def optimize_click():
     RestorePlayers()
 
 def save_click():
-    results = filedialog.asksaveasfilename(initialdir = '/home/pete/Documents/dk_lineups', title = 'Save File', initialfile = 'results.csv')
+    init_dir = ""
+    if (selected_sport.get() == 1):
+        init_dir = '/home/pete/Documents/dk_lineups'
+    elif (selected_sport.get() == 2):
+        init_dir = '/home/pete/Documents/nhl/dk_lineups'
+    results = filedialog.asksaveasfilename(initialdir = init_dir, title = 'Save File', initialfile = 'results.csv')
     LockPlayers()
     ExcludePlayers()
     exporter = CSVLineupExporter(optimizer.optimize(int(num_lineups.get())))
