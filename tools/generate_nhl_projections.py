@@ -4,7 +4,7 @@ import io
 import sys
 
 # Define file locations
-date = '2020-02-16'
+date = '2020-03-11'
 nhl_projections = '/home/pete/Documents/nhl/projection_downloads/DFF_NHL_cheatsheet_DATE.csv'
 dk_salaries_template = '/home/pete/Documents/nhl/dk_player_exports/DATE/DKSalaries.csv'
 update_dk_template = '/home/pete/Documents/nhl/dk_player_exports/DATE/DKSalaries_dff.csv'
@@ -58,7 +58,7 @@ index = 0
 for name in names:
     name_count = dk_data_frame['Name'].str.count(name).sum()
     if (name_count > 1):
-        print("Warning: More than one player with the same name")
+        print("Warning: More than one player with the same name", name)
         projected_points = nhl_data_frame.iloc[index].ppg_projection
         team = nhl_data_frame.iloc[index].team
         pos = nhl_data_frame.iloc[index].position
