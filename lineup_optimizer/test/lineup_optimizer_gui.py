@@ -149,9 +149,12 @@ class LineupOptimizerGui():
         self.remove_exclude_button.state(['!disabled'])
 
     def optimize_click(self):
+        print("Optimize Click")
         self.lock_players()
         self.exclude_players()
+        print("After lock and exclude")
         self.lineups = self.optimizer.optimize(int(self.num_lineups.get()))
+        print("After Lineup optmizer")
         self.progress_bar['value'] = 0
         self.progress_bar['maximum'] = int(self.num_lineups.get())
         for lineup in self.lineups:
@@ -268,10 +271,11 @@ class LineupOptimizerGui():
             sys.exit("faild to save %s" % self.results)
 
         if (self.selected_sport.get() == 1):
-            results_df = results_df[['QB', 'RB1', 'RB2', 'WR1', 'WR2', 'WR3', 'TE', 'FLEX', 'DST']]
+            results_df = results_df[['QB', 'RB', 'RB.1', 'WR', 'WR.1', 'WR.2', 'TE', 'FLEX', 'DST']]
             results_df.columns = ['QB', 'RB', 'RB', 'WR', 'WR', 'WR', 'TE', 'FLEX', 'DST']
         elif (self.selected_sport.get() == 2):
-            results_df = results_df[['C', 'C', 'W', 'W', 'W', 'D', 'D', 'G', 'UTIL']]
+            results_df = results_df[['C', 'C.1', 'W', 'W.1', 'W.2', 'D', 'D.1', 'G', 'UTIL']]
+            results_df.columns = ['C', 'C', 'W', 'W', 'W', 'D', 'D', 'G', 'UTIL']
         
         print(results_df)
         self.results = self.results.split('.')[0]
