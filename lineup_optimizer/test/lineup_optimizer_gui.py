@@ -149,12 +149,9 @@ class LineupOptimizerGui():
         self.remove_exclude_button.state(['!disabled'])
 
     def optimize_click(self):
-        print("Optimize Click")
         self.lock_players()
         self.exclude_players()
-        print("After lock and exclude")
         self.lineups = self.optimizer.optimize(int(self.num_lineups.get()))
-        print("After Lineup optmizer")
         self.progress_bar['value'] = 0
         self.progress_bar['maximum'] = int(self.num_lineups.get())
         for lineup in self.lineups:
@@ -173,16 +170,11 @@ class LineupOptimizerGui():
             init_dir = '/home/pete/Documents/dk_lineups'
         elif (self.selected_sport.get() == 2):
             init_dir = '/home/pete/Documents/nhl/dk_lineups'
-        print(init_dir)
-        print(self.lineups)
         self.results = filedialog.asksaveasfilename(initialdir = init_dir, title = 'Save File', initialfile = 'results.csv')
         exporter = CSVLineupExporter(self.lineup_array)
         #exporter = CSVLineupExporter(self.optimizer.optimize(int(self.num_lineups.get())))
-        print(exporter)
-        print(self.results)
         exporter.export(self.results)
         self.draft_kings_reformatting()
-        print("Clicked Save")
         self.save_button.state(['disabled'])
     
     def add_locked_player_click(self):
@@ -190,8 +182,6 @@ class LineupOptimizerGui():
         player = self.ffa_player_projections.iloc[row].Name
         if (player not in self.locked_player_list and player not in self.excluded_player_list):
             self.locked_player_list.append(player)
-        print(player)
-        print("Add Locked Player")
         print(self.locked_player_list)
 
         self.locked_player_listbox.delete(0, 'end')
@@ -207,7 +197,6 @@ class LineupOptimizerGui():
         for item in self.locked_player_list:
             self.locked_player_listbox.insert('end', item)
         print(self.locked_player_list)
-        print("Remove locked Player")
 
     def add_excluded_player_click(self):
         row = self.table.getSelectedRow()
@@ -219,7 +208,6 @@ class LineupOptimizerGui():
         for item in self.excluded_player_list:
             self.excluded_player_listbox.insert('end', item)
         print(self.excluded_player_list)
-        print("Add Excluded Player")
 
 
     def remove_excluded_player_click(self):
@@ -230,7 +218,7 @@ class LineupOptimizerGui():
         self.excluded_player_listbox.delete(0, 'end')
         for item in self.excluded_player_list:
             self.excluded_player_listbox.insert('end', item)
-        print("Removed Excluded Player")
+        print(self.exculded_player_list)
 
     # Helper Functions
     def load_optimizer(self):
@@ -254,14 +242,12 @@ class LineupOptimizerGui():
             player = self.optimizer.get_player_by_name(player_name)
             self.optimizer.add_player_to_lineup(player)
             print(player)
-        print("lock_players()")
 
     def exclude_players(self):
         for player_name in self.excluded_player_list:
             player = self.optimizer.get_player_by_name(player_name)
             self.optimizer.remove_player(player)
             print(player)
-        print("exclude_players")
 
     def draft_kings_reformatting(self):
         results_df = pd.DataFrame()
@@ -277,7 +263,6 @@ class LineupOptimizerGui():
             results_df = results_df[['C', 'C.1', 'W', 'W.1', 'W.2', 'D', 'D.1', 'G', 'UTIL']]
             results_df.columns = ['C', 'C', 'W', 'W', 'W', 'D', 'D', 'G', 'UTIL']
         
-        print(results_df)
         self.results = self.results.split('.')[0]
         results_df.to_csv(self.results+'_dk_format.csv', index=False)
         print("Saved: %s" % self.results+'_dk_format.csv')
