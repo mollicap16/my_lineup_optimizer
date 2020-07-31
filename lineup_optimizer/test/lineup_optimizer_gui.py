@@ -31,6 +31,9 @@ class LineupOptimizerGui():
         self.excluded_player_list=[]
         self.player_value=[]
         self.ffa_player_projections = pd.DataFrame()
+        self.lineups=""
+        self.lineup_array=[]
+        self.results=""
 
         self.master = master 
         master.title("Lineup Optimizer")
@@ -148,13 +151,36 @@ class LineupOptimizerGui():
     def optimize_click(self):
         self.lock_players()
         self.exclude_players()
-        lineups = self.optimizer.optimize(int(self.num_lineups.get()))
+        self.lineups = self.optimizer.optimize(int(self.num_lineups.get()))
         self.progress_bar['value'] = 0
         self.progress_bar['maximum'] = int(self.num_lineups.get())
-        print("Clicked Optimize")
+        for lineup in self.lineups:
+            self.lineup_array.append(lineup)
+            self.progress_bar['value'] +=1
+            self.master.update()
+        self.save_button.state(['!disabled'])
+        
+        # Print summary of lineups
+        for lineup in self.lineup_array:
+            print(lineup)
 
     def save_click(self):
+        init_dir = ""
+        if (self.selected_sport.get() == 1):
+            init_dir = '/home/pete/Documents/dk_lineups'
+        elif (self.selected_sport.get() == 2):
+            init_dir = '/home/pete/Documents/nhl/dk_lineups'
+        print(init_dir)
+        print(self.lineups)
+        self.results = filedialog.asksaveasfilename(initialdir = init_dir, title = 'Save File', initialfile = 'results.csv')
+        exporter = CSVLineupExporter(self.lineup_array)
+        #exporter = CSVLineupExporter(self.optimizer.optimize(int(self.num_lineups.get())))
+        print(exporter)
+        print(self.results)
+        exporter.export(self.results)
+        self.draft_kings_reformatting()
         print("Clicked Save")
+        self.save_button.state(['disabled'])
     
     def add_locked_player_click(self):
         row = self.table.getSelectedRow()
@@ -233,3 +259,21 @@ class LineupOptimizerGui():
             self.optimizer.remove_player(player)
             print(player)
         print("exclude_players")
+
+    def draft_kings_reformatting(self):
+        results_df = pd.DataFrame()
+        try: 
+            results_df = pd.read_csv(self.results)
+        except:
+            sys.exit("faild to save %s" % self.results)
+
+        if (self.selected_sport.get() == 1):
+            results_df = results_df[['QB', 'RB1', 'RB2', 'WR1', 'WR2', 'WR3', 'TE', 'FLEX', 'DST']]
+            results_df.columns = ['QB', 'RB', 'RB', 'WR', 'WR', 'WR', 'TE', 'FLEX', 'DST']
+        elif (self.selected_sport.get() == 2):
+            results_df = results_df[['C', 'C', 'W', 'W', 'W', 'D', 'D', 'G', 'UTIL']]
+        
+        print(results_df)
+        self.results = self.results.split('.')[0]
+        results_df.to_csv(self.results+'_dk_format.csv', index=False)
+        print("Saved: %s" % self.results+'_dk_format.csv')
