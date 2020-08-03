@@ -4,7 +4,7 @@ import io
 import sys
 
 # Define file locations
-date = '2020-03-11'
+date = '2020-08-02'
 nhl_projections = '/home/pete/Documents/nhl/projection_downloads/DFF_NHL_cheatsheet_DATE.csv'
 dk_salaries_template = '/home/pete/Documents/nhl/dk_player_exports/DATE/DKSalaries.csv'
 update_dk_template = '/home/pete/Documents/nhl/dk_player_exports/DATE/DKSalaries_dff.csv'

@@ -1,265 +1,255 @@
 import sys
-import pandas as pd
 import tkinter as tk
-from tkinter import ttk, filedialog, StringVar, IntVar 
-from pydfs_lineup_optimizer import get_optimizer, Site, Sport, CSVLineupExporter 
+import pandas as pd
+from tkinter import ttk, filedialog, StringVar, IntVar
+from pydfs_lineup_optimizer import get_optimizer, Site, Sport, CSVLineupExporter
 from pandastable import Table
 
-# Helper Methods
-def LoadOptimizer(filename):
-    global optimizer
-    if (selected_sport.get() == 1):
-        optimizer = get_optimizer(Site.DRAFTKINGS, Sport.FOOTBALL)
-    elif (selected_sport.get() == 2):
-        optimizer = get_optimizer(Site.DRAFTKINGS, Sport.HOCKEY)
-    try:
-        optimizer.load_players_from_csv(filename)
-    except: 
-        sys.exit('Invalid csv file format')
+class LineupOptimizerGui():
+    def __init__(self, master):
+        self.player_file=""
+        self.optimizer=get_optimizer(Site.DRAFTKINGS, Sport.FOOTBALL)
+        self.locked_player_list=[]
+        self.excluded_player_list=[]
+        self.player_value=[]
+        self.ffa_player_projections = pd.DataFrame()
+        self.lineups=""
+        self.lineup_array=[]
+        self.results=""
 
-def AddValueColumn(player_efficiency):
-    players = optimizer.players
-    for player in players:
-        player_efficiency.append(player.efficiency*1000)
+        self.master = master 
+        master.title("Lineup Optimizer")
 
-def DraftKingsRefromatting(filename):
-    results_df = pd.DataFrame()
-    try:
-         results_df = pd.read_csv(filename)
-    except:
-        sys.exit('Failed to save %s' % filename)
-    if (selected_sport.get() == 1):
-        results_df = results_df[['QB','RB1', 'RB2', 'WR1', 'WR2', 'WR3','TE', 'FLEX', 'DST']]
-        results_df.columns = ['QB', 'RB', 'RB', 'WR', 'WR', 'WR', 'TE', 'FLEX', 'DST']
-    elif (selected_sport.get() == 2):
-        results_df = results_df[['C', 'C.1', 'W', 'W.1', 'W.2', 'D', 'D.1', 'G', 'UTIL']]
-        results_df.columns = ['C', 'C', 'W', 'W', 'W', 'D', 'D', 'G', 'UTIL']
+        self.selected_sport=tk.IntVar(master, value=1)
 
-    filename = filename.split('.')[0]
-    results_df.to_csv(filename+'_DK_Format.csv', index=False)
-    print('Saved: %s' % filename+'_DK_Format.csv')
+        ttk.Sizegrip(master).grid(column=999, row=999, sticky=('SE'))
 
-def LockPlayers():
-    for player_name in locked_player_list:
-        player = optimizer.get_player_by_name(player_name)
-        optimizer.add_player_to_lineup(player)
+        # Setting up Frames on master window
+        self.top_frame = ttk.Frame(master, borderwidth=4, relief='sunken')
+        self.top_frame.grid(column=0, row=0, columnspan=2, sticky=('N', 'W', 'E', 'S'))
 
-def ExcludePlayers():
-    for player_name in excluded_player_list:
-        player = optimizer.get_player_by_name(player_name)
-        print(player)
-        optimizer.remove_player(player)
+        self.middle_left_frame = ttk.Frame(master, borderwidth=4, relief='sunken')
+        self.middle_left_frame.grid(column=0, row=1, sticky=('N', 'W', 'E', 'S'))
 
-def RestorePlayers():
-    # Unlock Players
-    for player_name in locked_player_list:
-        player = optimizer.get_player_by_name(player_name)
-        optimizer.remove_player_from_lineup(player)
+        self.middle_right_frame = ttk.Frame(master, borderwidth=4, relief='sunken')
+        self.middle_right_frame.grid(column=1, row=1)
 
-    # Include Players back into the lineup
-    for player_name in excluded_player_list:
-        player = optimizer.get_player_by_name(player_name)
-        optimizer.restore_player(player)
+        self.bottom_frame = ttk.Frame(master, borderwidth=4, relief='sunken')
+        self.bottom_frame.grid(column=0, row=2, columnspan=2, sticky=('N', 'W', 'E', 'S'))
+        
+        self.locked_player_frame = ttk.Frame(self.middle_right_frame, borderwidth=4, relief='sunken')
+        self.locked_player_frame.grid(column=0, row=0)
 
-# Global Variables
-player_file = ''
-ffa_player_projections = pd.DataFrame()
-optimizer = get_optimizer(Site.DRAFTKINGS, Sport.FOOTBALL)
-locked_player_list=[]
-excluded_player_list=[]
+        self.excluded_player_frame = ttk.Frame(self.middle_right_frame, borderwidth=4, relief='sunken')
+        self.excluded_player_frame.grid(column=0, row=1)
+        
+        # Menu 
+        self.menubar = tk.Menu(master)
+        self.filemenu = tk.Menu(self.menubar, tearoff=0)
+        self.sportsmenu = tk.Menu(self.menubar, tearoff=0)
+        self.sportsmenu.add_radiobutton(label="NFL", value=1, variable=self.selected_sport)
+        self.sportsmenu.add_radiobutton(label="NHL", value=2, variable=self.selected_sport)
 
-# Creating Main window object
-main_window = tk.Tk()
-main_window.title("Lineup Optimizer")
+        self.menubar.add_cascade(label='File', menu=self.filemenu)
+        self.menubar.add_cascade(label='Select Sport', menu = self.sportsmenu)
 
-selected_sport = tk.IntVar(main_window, value=1)
+        # List box
+        self.locked_player_listbox = tk.Listbox(self.locked_player_frame, height=10)
+        self.locked_player_listbox.grid(column = 0, row = 1, columnspan=2, sticky=('N', 'W', 'E', 'S'))
+        self.excluded_player_listbox = tk.Listbox(self.excluded_player_frame)
+        self.excluded_player_listbox.grid(column=0, row=1, columnspan=2, sticky=('N', 'W', 'E', 'S'))
 
-ttk.Sizegrip(main_window).grid(column=999, row=999, sticky=('SE'))
+        # Labels
+        self.load_label = ttk.Label(self.top_frame, text="Empty", background='white', relief='groove', width=50)
+        self.load_label.grid(column=1, row=0, sticky='E')
+        self.num_lineup_label = ttk.Label(self.bottom_frame, text="Number of Lineups")
+        self.num_lineup_label.grid(column=3, row=0, sticky='W')
+        self.locked_player_label = ttk.Label(self.locked_player_frame, text='Locked Players', font='-weight bold')
+        self.locked_player_label.grid(column=0, row=0, columnspan=2, sticky=('N', 'W', 'E', 'S'))
+        self.excluded_player_label = ttk.Label(self.excluded_player_frame, text='Excluded Players', font='-weight bold')
+        self.excluded_player_label.grid(column=0, row=0, columnspan=2, sticky=('N', 'W', 'E', 'S'))
 
-# Menu
-menubar = tk.Menu(main_window)
+        # Entries
+        self.num_lineups=tk.StringVar()
+        self.num_lineups.set(20)
+        self.num_of_lineups_entry = ttk.Entry(self.bottom_frame, textvariable=self.num_lineups, justify='center', width=10)
+        self.num_of_lineups_entry.grid(column=2, row=0, sticky='W', padx=(25,5))
 
-# TODO: Might want to remove borderwidth and relief for frames
-# Frames
-top_frame = ttk.Frame(main_window, borderwidth=4, relief='sunken')
-top_frame.grid(column=0, row=0, columnspan=2, sticky=('N', 'W', 'E', 'S'))
+        # Buttons
+        self.load_button = ttk.Button(self.top_frame, text="Load", command=self.load_click)
+        self.load_button.grid(column=0, row=0, sticky="W")
+        self.optimize_button = ttk.Button(self.bottom_frame, text="Optimize Lineups", command=self.optimize_click, state='disabled')
+        self.optimize_button.grid(column=1, row=0, sticky="E")
+        self.save_button = ttk.Button(self.bottom_frame, text="Save Lineups", command=self.save_click, state='disabled')
+        self.save_button.grid(column=0, row=0, sticky="W")
+        self.add_lock_button = ttk.Button(self.locked_player_frame, text="Add Player", command=self.add_locked_player_click, state='disabled')
+        self.add_lock_button.grid(column=0, row=2, sticky='W')
+        self.add_exclude_button = ttk.Button(self.excluded_player_frame, text="Add Player", command=self.add_excluded_player_click, state='disabled')
+        self.add_exclude_button.grid(column=0, row=2, sticky='W')
+        self.remove_lock_button = ttk.Button(self.locked_player_frame, text="Remove Player", command=self.remove_locked_player_click, state='disabled')
+        self.remove_lock_button.grid(column=1, row=2, sticky='E')
+        self.remove_exclude_button = ttk.Button(self.excluded_player_frame, text="Remove player", command=self.remove_excluded_player_click, state='disabled')
+        self.remove_exclude_button.grid(column=1, row=2, sticky='E')
 
-middle_left_frame = ttk.Frame(main_window, borderwidth=4, relief='sunken')
-middle_left_frame.grid(column=0, row=1, sticky=('N', 'W', 'E', 'S'))
+        # Progress bar
+        self.progress_bar = ttk.Progressbar(self.bottom_frame, orient='horizontal', mode='determinate')
+        self.progress_bar.grid(column=4, row=0, padx=20, sticky='E')
 
-middle_right_frame = ttk.Frame(main_window, borderwidth=4, relief='sunken')
-middle_right_frame.grid(column=1, row=1)
+        #This just tells Tk that if the master window is resized the frame should expand with it
+        master.columnconfigure(0, weight =1)
+        master.rowconfigure(1, weight =1)
 
-bottom_frame = ttk.Frame(main_window, borderwidth=4, relief='sunken')
-bottom_frame.grid(column=0, row=2, columnspan=2, sticky=('N', 'W', 'E', 'S'))
+        self.table = Table(self.middle_left_frame)
 
-locked_player_frame = ttk.Frame(middle_right_frame, borderwidth=4, relief='sunken')
-locked_player_frame.grid(column=0, row=0)
+        master.config(menu=self.menubar)
 
-excluded_player_frame = ttk.Frame(middle_right_frame, borderwidth=4, relief='sunken')
-excluded_player_frame.grid(column=0, row=1)
+    # Command Functions
+    def load_click(self):
+        init_dir = ""
+        if (self.selected_sport.get() == 1):
+            init_dir = "/home/pete/Documents/dk_player_exports/"
+        elif (self.selected_sport.get() == 2):
+            init_dir = "/home/pete/Documents/nhl/dk_player_exports/"
+        else: 
+            sys.exit("INVALID SPORT SELECTED")
+        self.player_file = filedialog.askopenfilename(initialdir=init_dir, title="Selected Projections")
+        self.load_label.configure(text=self.player_file, width=0)
+        self.save_button.state(['disabled'])
+        self.optimize_button.state(['!disabled'])
+        try:
+            self.ffa_player_projections = pd.read_csv (self.player_file)
+            self.load_optimizer()
+            self.add_value_column()
+            self.ffa_player_projections = self.ffa_player_projections.assign(Value = self.player_value)
+        except:
+            sys.exit("Invalid file type")
+        self.table = Table(self.middle_left_frame, dataframe=self.ffa_player_projections)
+        self.table.show()
+        self.add_lock_button.state(['!disabled'])
+        self.add_exclude_button.state(['!disabled'])
+        self.remove_lock_button.state(['!disabled'])
+        self.remove_exclude_button.state(['!disabled'])
 
-# This just tells Tk that if the main window is resized the frame should expand with it
-main_window.columnconfigure(0, weight=1)
-main_window.rowconfigure(1, weight =1)
+    def optimize_click(self):
+        self.lineup_array = []
+        self.lock_players()
+        self.exclude_players()
+        self.lineups = self.optimizer.optimize(int(self.num_lineups.get()))
+        self.progress_bar['value'] = 0
+        self.progress_bar['maximum'] = int(self.num_lineups.get())
+        for lineup in self.lineups:
+            self.lineup_array.append(lineup)
+            self.progress_bar['value'] +=1
+            self.master.update()
+        self.save_button.state(['!disabled'])
+        
+        # Print summary of lineups
+        for lineup in self.lineup_array:
+            print(lineup)
 
-table = Table(middle_left_frame)
+    def save_click(self):
+        init_dir = ""
+        if (self.selected_sport.get() == 1):
+            init_dir = '/home/pete/Documents/dk_lineups'
+        elif (self.selected_sport.get() == 2):
+            init_dir = '/home/pete/Documents/nhl/dk_lineups'
+        self.results = filedialog.asksaveasfilename(initialdir = init_dir, title = 'Save File', initialfile = 'results.csv')
+        exporter = CSVLineupExporter(self.lineup_array)
+        #exporter = CSVLineupExporter(self.optimizer.optimize(int(self.num_lineups.get())))
+        exporter.export(self.results)
+        self.draft_kings_reformatting()
+        self.save_button.state(['disabled'])
+    
+    def add_locked_player_click(self):
+        row = self.table.getSelectedRow()
+        player = self.ffa_player_projections.iloc[row].Name
+        if (player not in self.locked_player_list and player not in self.excluded_player_list):
+            self.locked_player_list.append(player)
+        print(self.locked_player_list)
 
-# Button Commands
-def load_click():
-    init_dir = ""
-    if (selected_sport.get()==1):
-        init_dir = "/home/pete/Documents/dk_player_exports/"
-    elif (selected_sport.get()==2):
-        init_dir = "/home/pete/Documents/nhl/dk_player_exports/"
-    else:
-        sys.exit("INVALID SPORT SELECTED")
-    player_file = filedialog.askopenfilename(initialdir = init_dir, title='Select Projections')
-    print(player_file)
-    load_label.configure(text=player_file, width=0)
-    save_button.state(['disabled'])
-    optimize_button.state(['!disabled'])
-    try:
-        global ffa_player_projections
-        ffa_player_projections = pd.read_csv(player_file)
-        LoadOptimizer(player_file)
-        player_value = []
-        AddValueColumn(player_value)
-        ffa_player_projections = ffa_player_projections.assign(Value = player_value)
-    except:
-        sys.exit("Invalid file type")
-    global table 
-    table = Table(middle_left_frame, dataframe=ffa_player_projections)
-    table.grid(column=0, row=0, rowspan=2)
-    table.show()
-    add_lock_button.state(['!disabled'])
-    add_exclude_button.state(['!disabled'])
-    remove_lock_button.state(['!disabled'])
-    remove_exclude_button.state(['!disabled'])
+        self.locked_player_listbox.delete(0, 'end')
+        for item in self.locked_player_list:
+            self.locked_player_listbox.insert('end', item)
+
+    def remove_locked_player_click(self):
+        player = self.locked_player_listbox.get('active')
+        if (player in self.locked_player_list):
+            self.locked_player_list.remove(player)
+
+        self.locked_player_listbox.delete(0, 'end')
+        for item in self.locked_player_list:
+            self.locked_player_listbox.insert('end', item)
+        print(self.locked_player_list)
+
+    def add_excluded_player_click(self):
+        row = self.table.getSelectedRow()
+        player = self.ffa_player_projections.iloc[row].Name
+        if (player not in self.excluded_player_list and player not in self.locked_player_list):
+            self.excluded_player_list.append(player)
+
+        self.excluded_player_listbox.delete(0, 'end')
+        for item in self.excluded_player_list:
+            self.excluded_player_listbox.insert('end', item)
+        print(self.excluded_player_list)
 
 
-def optimize_click():
-    LockPlayers()
-    ExcludePlayers()
-    lineups = optimizer.optimize(int(num_lineups.get()))
-    progress_bar['value'] = 0
-    progress_bar['maximum'] = int(num_lineups.get())
-    for lineup in lineups:
-        print(lineup)
-        progress_bar['value'] += 1
-        main_window.update()
-    save_button.state(['!disabled'])
-    RestorePlayers()
+    def remove_excluded_player_click(self):
+        player = self.excluded_player_listbox.get('active')
+        if (player in self.excluded_player_list):
+            self.excluded_player_list.remove(player)
 
-def save_click():
-    init_dir = ""
-    if (selected_sport.get() == 1):
-        init_dir = '/home/pete/Documents/dk_lineups'
-    elif (selected_sport.get() == 2):
-        init_dir = '/home/pete/Documents/nhl/dk_lineups'
-    results = filedialog.asksaveasfilename(initialdir = init_dir, title = 'Save File', initialfile = 'results.csv')
-    LockPlayers()
-    ExcludePlayers()
-    exporter = CSVLineupExporter(optimizer.optimize(int(num_lineups.get())))
-    exporter.export(results)
-    DraftKingsRefromatting(results)
-    save_button.state(['disabled'])
+        self.excluded_player_listbox.delete(0, 'end')
+        for item in self.excluded_player_list:
+            self.excluded_player_listbox.insert('end', item)
+        print(self.excluded_player_list)
 
-def add_locked_player_click():
-    row = table.getSelectedRow()
-    player = ffa_player_projections.iloc[row].Name
-    if (player not in locked_player_list and player not in excluded_player_list):
-        locked_player_list.append(player)
+    # Helper Functions
+    def load_optimizer(self):
+        if (self.selected_sport.get() == 1):
+            self.optimizer = get_optimizer(Site.DRAFTKINGS, Sport.FOOTBALL)
+        elif (self.selected_sport.get() == 2):
+            self.optimizer = get_optimizer(Site.DRAFTKINGS, Sport.HOCKEY)
+        try:
+            self.optimizer.load_players_from_csv(self.player_file)
+        except:
+            sys.exit("Invalid csv file format")
 
-    locked_player_listbox.delete(0,'end')
-    for item in locked_player_list:
-        locked_player_listbox.insert('end', item)
+    def add_value_column(self):
+        self.player_value = []
+        players = self.optimizer.players
+        for player in players:
+            self.player_value.append(player.efficiency*1000)
+    
+    def lock_players(self):
+        current_locked_players = self.optimizer.locked_players
+        print(current_locked_players)
+        for player_name in self.locked_player_list:
+            #if player_name in self.optimizer.locked_players:
+            print(player_name)
+            player = self.optimizer.get_player_by_name(player_name)
+            self.optimizer.add_player_to_lineup(player)
+            print(player)
 
-def remove_locked_player_click():
-    player = locked_player_listbox.get('active')
-    if (player in locked_player_list):
-        locked_player_list.remove(player)
+    def exclude_players(self):
+        for player_name in self.excluded_player_list:
+            player = self.optimizer.get_player_by_name(player_name)
+            self.optimizer.remove_player(player)
+            print(player)
 
-    locked_player_listbox.delete(0,'end')
-    for item in locked_player_list:
-        locked_player_listbox.insert('end', item)
+    def draft_kings_reformatting(self):
+        results_df = pd.DataFrame()
+        try: 
+            results_df = pd.read_csv(self.results)
+        except:
+            sys.exit("faild to save %s" % self.results)
 
-def add_excluded_player_click():
-    row = table.getSelectedRow()
-    player = ffa_player_projections.iloc[row].Name
-    if (player not in excluded_player_list and player not in locked_player_list):
-        excluded_player_list.append(player)
-
-    excluded_player_listbox.delete(0,'end')
-    for item in excluded_player_list:
-        excluded_player_listbox.insert('end', item)
-
-def remove_excluded_player_click():
-    player = excluded_player_listbox.get('active')
-    if (player in excluded_player_list):
-        excluded_player_list.remove(player)
-
-    excluded_player_listbox.delete(0,'end')
-    for item in excluded_player_list:
-        excluded_player_listbox.insert('end', item)
-
-# Menubar
-filemenu = tk.Menu(menubar, tearoff=0)
-sportsmenu = tk.Menu(menubar, tearoff=0)
-sportsmenu.add_radiobutton(label="NFL", value=1, variable=selected_sport)
-sportsmenu.add_radiobutton(label="NHL", value=2, variable=selected_sport)
-
-menubar.add_cascade(label='File', menu=filemenu)
-menubar.add_cascade(label='Select Sport', menu = sportsmenu)
-
-# list box
-locked_player_listbox = tk.Listbox(locked_player_frame, height=10)
-locked_player_listbox.grid(column = 0, row = 1, columnspan=2, sticky=('N', 'W', 'E', 'S'))
-excluded_player_listbox = tk.Listbox(excluded_player_frame)
-excluded_player_listbox.grid(column=0, row=1, columnspan=2, sticky=('N', 'W', 'E', 'S'))
-
-# Labels
-load_label = ttk.Label(top_frame, text="empty", background='white', relief='groove', width=50)
-load_label.grid(column=1, row=0, sticky='E')
-num_lineup_label = ttk.Label(bottom_frame, text="Number of Lineups")
-num_lineup_label.grid(column=3, row=0, sticky='W')
-locked_player_label = ttk.Label(locked_player_frame, text='Locked Players', font='-weight bold')
-locked_player_label.grid(column = 0, row = 0, columnspan=2, sticky=('N', 'W', 'E', 'S'))
-excluded_player_label = ttk.Label(excluded_player_frame, text='Excluded Players', font='-weight bold')
-excluded_player_label.grid(column=0, row=0, columnspan=2, sticky=('N', 'W', 'E', 'S'))
-
-# Entries
-num_lineups = tk.StringVar() 
-num_lineups.set(20)
-num_of_lineups_entry = ttk.Entry(bottom_frame, textvariable=num_lineups, justify='center', width=10)
-num_of_lineups_entry.grid(column=2, row=0, sticky='W', padx=(25,5))
-
-# Buttons
-load_button = ttk.Button(top_frame, text="Load", command=load_click)
-load_button.grid(column=0, row=0, sticky="W")
-
-optimize_button = ttk.Button(bottom_frame, text="Optimize Lineups", command=optimize_click, state='disabled')
-optimize_button.grid(column=1, row=0, sticky="E")
-
-save_button = ttk.Button(bottom_frame, text="Save Lineups", command=save_click, state='disabled')
-save_button.grid(column=0, row=0, sticky="W")
-
-add_lock_button = ttk.Button(locked_player_frame, text='Add Player', command=add_locked_player_click, state='disabled')
-add_lock_button.grid(column=0, row=2, sticky='W')
-
-add_exclude_button = ttk.Button(excluded_player_frame, text='Add Player', command=add_excluded_player_click, state='disabled')
-add_exclude_button.grid(column=0, row=2, sticky='W')
-
-remove_lock_button = ttk.Button(locked_player_frame, text='Remove Player', command=remove_locked_player_click, state='disabled')
-remove_lock_button.grid(column=1, row=2, sticky='E')
-
-remove_exclude_button = ttk.Button(excluded_player_frame, text='Remove Player', command=remove_excluded_player_click, state='disabled')
-remove_exclude_button.grid(column=1, row=2, sticky='E')
-
-# Progressbar
-progress_bar = ttk.Progressbar(bottom_frame, orient='horizontal', mode='determinate')
-progress_bar.grid(column=4, row=0, padx=20, sticky='E')
-
-# Calling mainloop
-main_window.config(menu=menubar)
-main_window.mainloop();
+        if (self.selected_sport.get() == 1):
+            results_df = results_df[['QB', 'RB', 'RB.1', 'WR', 'WR.1', 'WR.2', 'TE', 'FLEX', 'DST']]
+            results_df.columns = ['QB', 'RB', 'RB', 'WR', 'WR', 'WR', 'TE', 'FLEX', 'DST']
+        elif (self.selected_sport.get() == 2):
+            results_df = results_df[['C', 'C.1', 'W', 'W.1', 'W.2', 'D', 'D.1', 'G', 'UTIL']]
+            results_df.columns = ['C', 'C', 'W', 'W', 'W', 'D', 'D', 'G', 'UTIL']
+        
+        self.results = self.results.split('.')[0]
+        results_df.to_csv(self.results+'_dk_format.csv', index=False)
+        print("Saved: %s" % self.results+'_dk_format.csv')
